@@ -16,7 +16,7 @@ class AudioPageClass {
     this.Update();
   }
 
-  Update() : void {
+  Update() {
     setTimeout(() => this.Update(), 60000 / this.bpm / 4);
 
     const currentBlock: string = this.pattern[this.patternPointer];
