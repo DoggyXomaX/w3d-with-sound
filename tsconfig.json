@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "rootDir": "ts",
+    "outDir": "js",
+    "noEmitOnError": true,
+    "newLine": "lf",
+    "alwaysStrict": true,
+    "strictNullChecks": true,
+    "sourceMap": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
