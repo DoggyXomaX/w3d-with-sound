@@ -116,8 +116,8 @@ class World3DClass {
     context.beginPath();
     for (let i = 0; i < length; i++) {
       const selectedPointer: Pointer = obj3D.indices[i];
-      const sideLength: number = selectedPointer.length;
-      for (let j = 0; j < sideLength; j++) {
+      const sideCount: number = selectedPointer.length;
+      for (let j = 0; j < sideCount; j++) {
         const p = obj3D.deltaPoints[selectedPointer[j]];
         if (j === 0)
           context.moveTo(p.x, p.y);
