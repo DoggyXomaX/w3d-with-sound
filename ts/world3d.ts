@@ -112,9 +112,9 @@ class World3DClass {
     const context : Context2D = this.canvas.getContext('2d');
     if (context === null) return;
     
-    const pointsLength: number = obj3D.deltaPoints.length;
+    const { length } = obj3D;
     context.beginPath();
-    for (let i = 0; i < pointsLength; i++) {
+    for (let i = 0; i < length; i++) {
       const selectedPointer: Pointer = obj3D.indices[i];
       const sideLength: number = selectedPointer.length;
       for (let j = 0; j < sideLength; j++) {
