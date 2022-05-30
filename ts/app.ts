@@ -5,7 +5,7 @@ const GlobalPattern: string[] = [
   'x-x-x-x-x-x-x-x-'.repeat(3) + 'x-x-x-x-----x---' + 'xxxxxxxxxxxxxxxx'.repeat(3) + 'xxxxxxxxx-x---x-',
   'xxxxxxxxxxxxxxxx'.repeat(3) + 'xxxxxxxxx-x---x-' + 'x-x-x-x-x-x-x-x-'.repeat(3) + 'x-x-x-x-----x---',
 ];
-const GlobalBPM: number = 90;
+const GlobalBPM: number = 70;
 
 class App {
   mainContainer: HTMLDivElement;
@@ -47,6 +47,7 @@ class App {
       (world3D: World3D) => this.DrawFrame(world3D)
     );
     world3D.Add(this.testObject);
+    world3D.clearColor = new Color4(0, 0, 0, 0.4);
 
     const audioPage = new AudioPage(
       GlobalSampleList,

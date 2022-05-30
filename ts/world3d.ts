@@ -125,6 +125,7 @@ class World3D {
   canvas: HTMLCanvasElement;
   context: Context2D;
   objects: Object3D[];
+  clearColor: Color4 = new Color4(0, 0, 0, 1);
   updateCallback: World3DCallback;
 
   constructor(width: number, height: number, container: HTMLElement, updateCallback: World3DCallback) {
@@ -156,7 +157,7 @@ class World3D {
   Clear() {
     if (this.context === null) return;
 
-    this.context.fillStyle = '#000000';
+    this.context.fillStyle = `rgba(${this.clearColor.r},${this.clearColor.g},${this.clearColor.b},${this.clearColor.a})`;
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
