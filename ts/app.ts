@@ -13,7 +13,7 @@ class App {
   rotationVelocity: Vector3 = new Vector3(0, 0, 0);
 
   constructor() {
-    // Create Main Container
+    // Create Main Container 
     const div = document.createElement('div');
     div.className = 'page-container';
     document.body.appendChild(div);
@@ -75,7 +75,7 @@ class App {
         console.log(names[p]);
 
         const power = [0.06, 0.03, 0, 0];
-        this.rotationVelocity.Add(new Vector3(1, 1, 1).Multiply(Math.random() * power[p]));
+        this.rotationVelocity.Add(new Vector3(1, 1, 1).Multiply(power[p] * 0.5 + Math.random() * power[p] * 0.5));
       }
       audioPage.pointers[p]++;
       if (audioPage.pointers[p] === pattern.length)
