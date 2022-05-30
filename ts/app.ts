@@ -1,11 +1,47 @@
-const GlobalSampleList = ['0.mp3', '1.mp3', '2.mp3', '3.mp3'];
-const GlobalPattern: string[] = [
-  'x---------x-----'.repeat(3) + 'x---------x--xx-' + 'x--x--x--x------'.repeat(3) + 'x--x--x--x---xx-',
-  '----x-------x---'.repeat(3) + '----x-------x--x' + '----x-------x---'.repeat(3) + '----x-------x--x',
-  'x-x-x-x-x-x-x-x-'.repeat(3) + 'x-x-x-x-----x---' + 'xxxxxxxxxxxxxxxx'.repeat(3) + 'xxxxxxxxx-x---x-',
-  'xxxxxxxxxxxxxxxx'.repeat(3) + 'xxxxxxxxx-x---x-' + 'x-x-x-x-x-x-x-x-'.repeat(3) + 'x-x-x-x-----x---',
+const GlobalSampleListLegacy = ['0.mp3', '1.mp3', '2.mp3', '3.mp3'];
+const GlobalSampleList = [
+  // Drums
+  'pack1/kick.mp3',
+  'pack1/hat.mp3',
+  'pack1/snare.mp3',
+  'pack1/808.mp3',
+
+  // Bass
+  'pack1/bass1.mp3',
+  'pack1/bass2.mp3',
+
+  // Melody
+  'pack1/plunk1.mp3',
+  'pack1/plunk2.mp3',
+  'pack1/plunk3.mp3',
+
+  // Vocal
+  'pack1/smoke1.mp3',
+  'pack1/smoke2.mp3',
+  'pack1/amogus.mp3',
+  'pack1/maslous.mp3',
+  'pack1/maslous2.mp3'
 ];
-const GlobalBPM: number = 70;
+const GlobalPattern: string[] = [
+  'x---------x-----'.repeat(3) + 'x-----x---------',
+  '--xx--xxxx-x--x-'.repeat(3) + '--x-x-----x-x---',
+  '----x-------x--x'.repeat(3) + '--------x-----x-',
+  'x---------------'.repeat(3) + 'x---------------',
+
+  'x-b-x--bx--bx-b-'.repeat(3) + 'xxxxxxbxxxxxxxbx',
+  '--xxb---------x-'.repeat(3) + '------x-------x-',
+
+  '---x----x-------'.repeat(3) + 'x---------------',
+  '------x---x---x-'.repeat(3) + '------x---------',
+  'x-x-x-------x---'.repeat(3) + '------------x---',
+
+  '--------' + '--------' + '--------' + '------x-',
+  '--------' + '------x-' + '--------' + '--------',
+  '--------' + '--x-----' + '--------' + '--------',
+  '--------' + '--------' + '--------' + '-x------' + '--------' + '--------' + '--------' + '--------',
+  '--------' + '--------' + '--------' + '--------' + '--------' + '--------' + '--------' + '-x------',
+];
+const GlobalBPM: number = 90;
 
 class App {
   mainContainer: HTMLDivElement;
@@ -13,7 +49,7 @@ class App {
   rotationVelocity: Vector3 = new Vector3(0, 0, 0);
 
   constructor() {
-    // Create Main Container 
+    // Create Main Container
     const div = document.createElement('div');
     div.className = 'page-container';
     document.body.appendChild(div);
@@ -63,25 +99,39 @@ class App {
 
   AudioFrame(audioPage: AudioPage) {
     const { length } = audioPage.pointers;
+    const logEntry: string[] = [];
     for (let p = 0; p < length; p++) {
       const pattern = audioPage.pattern[p];
-      if (pattern[audioPage.pointers[p]] === 'x') {
+      const symbol = pattern[audioPage.pointers[p]];
+
+      if (symbol === 'x') {
         const audio = audioPage.audios[p];
         if (audio === null) continue;
         audio.pause();
         audio.currentTime = 0;
         audio.play().catch(() => undefined);
 
-        const names = ['kick', 'snare', 'a', 'a#'];
-        console.log(names[p]);
+        const names = GlobalSampleList;
+        logEntry.push(names[p]);
 
-        const power = [0.06, 0.03, 0, 0];
-        this.rotationVelocity.Add(new Vector3(1, 1, 1).Multiply(power[p] * 0.5 + Math.random() * power[p] * 0.5));
+        const power = new Array<number>(names.length).fill(0);
+        power[0] = 0.006;
+        power[2] = 0.003;
+        power[3] = 0.012;
+
+        this.rotationVelocity.Add(new Vector3(1, 1, 1).Multiply(power[p] * 0.8 + Math.random() * power[p] * 0.2));
+      } else if (symbol === 'b') {
+        const audio = audioPage.audios[p];
+        if (audio === null) continue;
+        audio.pause();
       }
+
       audioPage.pointers[p]++;
       if (audioPage.pointers[p] === pattern.length)
         audioPage.pointers[p] = 0;
     }
+    if (logEntry.length !== 0)
+      console.log(`[${logEntry.join(' ')}]`);
   }
 
   DrawFrame(world3D: World3D) {
@@ -90,8 +140,13 @@ class App {
     // Add some velocity
     this.testObject.eulerAngles.Add(this.rotationVelocity);
 
+    // Color
+    const value = this.rotationVelocity.x * 100 > 1 ? 1 : this.rotationVelocity.x * 100;
+    this.testObject.color = new Color4(value * 255, 255 - value * 255, 0, value * value);
+    world3D.canvas.style.filter = `blur(${value * 2}px)`
+
     // Scale
-    const scale = 1 + this.rotationVelocity.x * 20;
+    const scale = 1 + this.rotationVelocity.x * 100;
     const one = new Vector3(1, 1, 1);
     this.testObject.scale.Set(one.Multiply(scale));
 
