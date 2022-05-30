@@ -12,3 +12,17 @@ html, body {
 body {
   background-color: #000000;
 }
+
+.page-container {
+  position: relative;
+  display: block;
+  margin: 0 auto;
+  width: max-content;
+  height: max-content;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.viewport {
+  /* border-radius: 25%; */
+}
